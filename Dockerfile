@@ -176,12 +176,10 @@ RUN cd src/mmaction2 \
 && wget -c https://download.openmmlab.com/mmaction/recognition/tsn/tsn_r50_1x1x3_100e_kinetics400_rgb/tsn_r50_1x1x3_100e_kinetics400_rgb_20200614-e508be42.pth \
 -O checkpoints/tsn_r50_1x1x3_100e_kinetics400_rgb_20200614-e508be42.pth \
 
-&& wget -c https://download.openmmlab.com/mmaction/recognition/slowfast/slowfast_r50_8x8x1_256e_kinetics400_rgb/slowfast_r50_8x8x1_256e_kinetics400_rgb_20200704-73547d2b.pth \
--O checkpoints/slowfast_kinetics_pretrained_r50_8x8x1_20e_ava_rgb.pth \
 && wget -c https://download.openmmlab.com/mmaction/recognition/tsm/tsm_r50_video_1x1x8_100e_kinetics400_rgb/tsm_r50_video_1x1x8_100e_kinetics400_rgb_20200702-a77f4328.pth \
--O checkpoints/tsm_r50_video_1x1x8_100e_kinetics400_rgb_20200702-a77f4328.pth \
-&& cd ../ \
-&& COPY webcam_spatiotemporal.py ./webcam_spatiotemporal.py 
+-O checkpoints/tsm_r50_video_1x1x8_100e_kinetics400_rgb_20200702-a77f4328.pth 
+
+COPY webcam_spatiotemporal.py src/mmaction2/webcam_spatiotemporal.py 
 # setup entrypoint
 COPY ros_entrypoint.sh /workspace/zed_catkin_ws/ros_entrypoint.sh 
 ENTRYPOINT [ "./ros_entrypoint.sh" ]  
