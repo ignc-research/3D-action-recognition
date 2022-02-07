@@ -148,3 +148,5 @@ python demo/webcam_demo_spatiotemporal_det.py \
     --show
 ```
 #Tips
+- If docker access problems submerge: Run 'xhost +'
+- When pulling the repository, use 'git lfs pull'
