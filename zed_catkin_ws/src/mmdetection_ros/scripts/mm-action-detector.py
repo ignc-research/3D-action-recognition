@@ -38,7 +38,7 @@ from mmcv.runner import load_checkpoint
 rospy.logdebug("Start MMdetecctor Action Recognition")
 
 CONFIG_PATH = '/workspace/zed_catkin_ws/src/mmdetection_ros/mmaction2/configs/detection/ava/slowfast_kinetics_pretrained_r50_8x8x1_20e_ava_rgb.py'
-MODEL_PATH = '/workspace/zed_catkin_ws/src/mmdetection_ros/mmaction2/checkpoints/slowfast_kinetics_pretrained_r50_8x8x1_20e_ava_rgb_20201217-ae225e97.pth'
+MODEL_PATH = '/workspace/zed_catkin_ws/src/mmdetection_ros/checkpoints/slowfast_kinetics_pretrained_r50_8x8x1_20e_ava_rgb_20201217-ae225e97.pth'
 LABEL_MAP_PATH = '/workspace/zed_catkin_ws/src/mmdetection_ros/mmaction2/tools/data/ava/label_map.txt'
 COLORS_2D = (0,0,255)
 SCALE =  1
