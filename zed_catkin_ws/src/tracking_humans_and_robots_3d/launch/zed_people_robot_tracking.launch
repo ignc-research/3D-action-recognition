@@ -20,7 +20,7 @@
       <!-- Launch robot tracking-->
       <group if = "$(eval arg('robot_tracking') == 1)">
             <include file = "$(find mmdetection_ros)/launch/mmdetector.launch">
-                  <arg name = "robot_tracking_visualization_2d"            value = "false" />
+                  <arg name = "robot_tracking_visualization_2d"            value = "true" />
                   <arg name = "robot_tracking_visualization_3d"            value = "true" />
             </include>
       </group>
