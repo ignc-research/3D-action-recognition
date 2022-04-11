@@ -1,0 +1,3 @@
+[submodule "zed_catkin_ws/src/src/mmdetection_ros"]
+	path = zed_catkin_ws/src/src/mmdetection_ros
+	url = https://github.com/open-mmlab/mmaction2/
