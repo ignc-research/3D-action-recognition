@@ -31,4 +31,6 @@ First download these two pre-trained models from mmaction2 and copy them to zed_
 - It is easier, better and faster to build the docker container once and work on a commit (docker commit) while developping (This avoids waiting for the ZED2 camera to download and optimize the human detection model for the hardware whenever it is necessary to rebuild the container since the ZED2 camera often freezes/crashes): 
 
 - It is necessary to modify the line 86 in nano /usr/local/lib/python3.7/dist-packages
-/mmdet/core/bbox/transforms.py: bbox_list -> bbox_list[0]. Otherwise the action recognition inference will deliver an error. 
+/mmdet/core/bbox/transforms.py: 
+    bbox_list to bbox_list[0] 
+Otherwise the action recognition inference will deliver an error. 
