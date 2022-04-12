@@ -1,9 +1,7 @@
 
 ARG BASE_IMAGE=nvcr.io/nvidia/l4t-base:r32.5.0
-#ARG BASE_IMAGE=nvcr.io/nvidia/l4t-pytorch:r32.5.0-pth1.6-py3
 FROM ${BASE_IMAGE}
 
-#ARG ROS_PKG=ros_base
 ARG ROS_PKG=desktop-full
 ENV ROS_DISTRO=melodic
 ENV ROS_ROOT=/opt/ros/${ROS_DISTRO}
@@ -19,11 +17,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     lsb-release ca-certificates software-properties-common \ 
     && add-apt-repository universe && apt-get update \
     && rm -rf /var/lib/apt/lists/*
-
-#RUN  apt-get update \
-#  && apt-get install -y wget \
-#  && rm -rf /var/lib/apt/lists/*
-
 
 # **********************
 # Installing python 3.7*
@@ -64,11 +57,10 @@ RUN apt-get update -y && apt-get install --no-install-recommends \
 
 # ************************************
 # installing:
-    # - cuda enabled pytorch version:  real 1.7.0 -> saved as 1.7.1
+    # - cuda enabled pytorch version: 1.7.0 -> saved as 1.7.1
     # - mmcv version:  1.4.3
         # - mmdetection version:  2.19.0 
 # ************************************
-
 # Installing cuda enbaled pytorch  
 WORKDIR /pytorch_wheel
 COPY torch-1.7.1-cp37-cp37m-linux_aarch64.whl .
@@ -107,21 +99,6 @@ RUN cd decord \
         && apt-get autoremove \
         && rm -rf /var/lib/apt/lists/* 
 
-# mmaction installation
-WORKDIR /mmaction2
-#COPY mmaction2-0.21.0-py2.py3-none-any.whl .
-#RUN pip3 install mmaction2-0.21.0-py2.py3-none-any.whl
-
-# note: make sure you have cmake 3.8 or later, you can install from cmake official website if it's too old
-#WORKDIR /workspace/zed_catkin_ws/src/ 
-#RUN git clone https://github.com/open-mmlab/mmaction2.git \
-#	&& cd mmaction2 \
-#	&& pip install -r requirements/build.txt \
-#	&& pip install scipy==1.7.0 einops \
-#	&& pip install -v -e .   
-
-#RUN mkdir checkpoints\	
-#	&& wget -c https://download.openmmlab.com/mmaction/detection/ava/slowonly_omnisource_pretrained_r101_8x8x1_20e_ava_rgb/slowonly_omnisource_pretrained_r101_8x8x1_20e_ava_rgb_20201217-16378594.pth -O checkpoints/slowonly_omnisource_pretrained_r101_8x8x1_20e_ava_rgb_20201217-16378594.pth
 # Done: install ros melodic with python 2
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add - 
@@ -152,35 +129,35 @@ RUN echo 'source /opt/ros/${ROS_DISTRO}/setup.bash' >> /root/.bashrc
 COPY zed_catkin_ws /workspace/zed_catkin_ws
 WORKDIR /workspace/zed_catkin_ws
 
-# build catkin workspace  
-RUN nvcc --version
+# build catkin workspace
+RUN echo "Hello"  
 RUN /bin/bash -c '. /opt/ros/melodic/setup.bash ; catkin_make -DCMAKE_BUILD_TYPE=Release'
 	
 # source ros workspace
 RUN echo 'source /workspace/zed_catkin_ws/devel/setup.bash' >> /root/.bashrc
 
-RUN cd src \
-	&& git clone https://github.com/open-mmlab/mmaction2.git \
-        && cd mmaction2 \
-        && pip install -r requirements/build.txt \
-        && pip install scipy==1.7.0 einops \
-        && pip install -v -e . \
-	&& pip install mmaction2 
-RUN cd src/mmaction2 \
-&& mkdir checkpoints \
-&&  wget -c https://download.openmmlab.com/mmaction/detection/ava/slowonly_omnisource_pretrained_r101_8x8x1_20e_ava_rgb/slowonly_omnisource_pretrained_r101_8x8x1_20e_ava_rgb_20201217-16378594.pth \
--O checkpoints/slowonly_omnisource_pretrained_r101_8x8x1_20e_ava_rgb_20201217-16378594.pth \
-&& wget -c https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_2x_coco/faster_rcnn_r50_fpn_2x_coco_bbox_mAP-0.384_20200504_210434-a5d8aa15.pth \
--O checkpoints/faster_rcnn_r50_fpn_2x_coco_bbox_mAP-0.384_20200504_210434-a5d8aa15.pth \
+# build MMaction2 from source and download model checkpoint files for humn detection and action recognition 
+RUN cd src/mmdetection_ros/mmaction2 \
+    && pip3 install -r requirements/build.txt \
+    && pip3 install scipy==1.7.0 einops \
+    && pip3 install -v -e . \
+	&& pip3 install mmaction2 \
+	&& pip3 install mmcv-full
+   
 
-&& wget -c https://download.openmmlab.com/mmaction/recognition/tsn/tsn_r50_1x1x3_100e_kinetics400_rgb/tsn_r50_1x1x3_100e_kinetics400_rgb_20200614-e508be42.pth \
--O checkpoints/tsn_r50_1x1x3_100e_kinetics400_rgb_20200614-e508be42.pth \
-
-&& wget -c https://download.openmmlab.com/mmaction/recognition/tsm/tsm_r50_video_1x1x8_100e_kinetics400_rgb/tsm_r50_video_1x1x8_100e_kinetics400_rgb_20200702-a77f4328.pth \
--O checkpoints/tsm_r50_video_1x1x8_100e_kinetics400_rgb_20200702-a77f4328.pth 
-
-COPY webcam_spatiotemporal.py src/mmaction2/webcam_spatiotemporal.py 
 # setup entrypoint
-COPY ros_entrypoint.sh /workspace/zed_catkin_ws/ros_entrypoint.sh 
+COPY ros_entrypoint.sh /workspace/zed_catkin_ws/ros_entrypoint.sh
+
 ENTRYPOINT [ "./ros_entrypoint.sh" ]  
 
+    
+    
+#    &&  wget -c https://download.openmmlab.com/mmaction/detection/ava/slowonly_omnisource_pretrained_r101_8x8x1_20e_ava_rgb/slowonly_omnisource_pretrained_r101_8x8x1_20e_ava_rgb_20201217-16378594.pth \
+#        -O checkpoints/slowonly_omnisource_pretrained_r101_8x8x1_20e_ava_rgb_20201217-16378594.pth
+#    && wget -c https://download.openmmlab.com/mmdetection/v2.0/faster_rcnn/faster_rcnn_r50_fpn_2x_coco/faster_rcnn_r50_fpn_2x_coco_bbox_mAP-0.384_20200504_210434-a5d8aa15.pth \
+#        -O checkpoints/faster_rcnn_r50_fpn_2x_coco_bbox_mAP-0.384_20200504_210434-a5d8aa15.pth \
+#    && wget -c https://download.openmmlab.com/mmaction/recognition/tsn/tsn_r50_1x1x3_100e_kinetics400_rgb/tsn_r50_1x1x3_100e_kinetics400_rgb_20200614-e508be42.pth \
+#        -O checkpoints/tsn_r50_1x1x3_100e_kinetics400_rgb_20200614-e508be42.pth \
+#    && wget -c https://download.openmmlab.com/mmaction/recognition/tsm/tsm_r50_video_1x1x8_100e_kinetics400_rgb/tsm_r50_video_1x1x8_100e_kinetics400_rgb_20200702-a77f4328.pth \
+#        -O checkpoints/tsm_r50_video_1x1x8_100e_kinetics400_rgb_20200702-a77f4328.pth 
+# COPY webcam_spatiotemporal.py src/mmdetection_ros/mmaction2/webcam_spatiotemporal.py 
