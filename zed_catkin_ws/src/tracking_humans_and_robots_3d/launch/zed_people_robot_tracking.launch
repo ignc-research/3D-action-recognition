@@ -3,25 +3,20 @@
 
       <arg name= "rviz_visualization"                          value ="1" />
       
-      <!-- Robot tracking parameters -->
-      <arg name = "robot_tracking"                             value ="1" />
-      
-      <!-- Human tracking parameters -->
+      <arg name = "zed2_camera"               value = "1" />
       <arg name = "human_tracking"               value = "1" />
       <arg name = "visualization_human_tracking" value = "true" doc="start Rviz with predefined configuration?"/>
 
       
-      <!-- Launch zed 2 and human tracking-->
-      <!-- TODO: seperate camera launch process from human tracking service -->
-      <group if = "$(eval arg('human_tracking') == 1)">
+      <group if = "$(eval arg('zed2_camera') == 1)">
             <include file = "$(find zed_wrapper)/launch/zed2.launch"/>
       </group>
   
       <!-- Launch robot tracking-->
-      <group if = "$(eval arg('robot_tracking') == 1)">
+      <group if = "$(eval arg('human_tracking') == 1)">
             <include file = "$(find mmdetection_ros)/launch/mmdetector.launch">
-                  <arg name = "robot_tracking_visualization_2d"            value = "true" />
-                  <arg name = "robot_tracking_visualization_3d"            value = "true" />
+                  <arg name = "human_tracking_visualization_2d"            value = "true" />
+                  <arg name = "human_tracking_visualization_3d"            value = "true" />
             </include>
       </group>
 
