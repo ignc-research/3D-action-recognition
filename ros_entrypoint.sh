@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 kkkk#!/bin/bash
+=======
+#!/bin/bash
+>>>>>>> fd38e608a0de924ca158d7009aa897a4d8698bd0
 set -e
 
 echo "ROS_DISTRO $ROS_DISTRO"
