@@ -14,5 +14,6 @@ source "$ROS_ENV_SETUP"
 echo "Source ROS_WORKSPACE_SETUP  $ROS_WORKSPACE_SETUP"
 source "$ROS_WORKSPACE_SETUP"
 
-# to start terminal
+# to start terminal 
 exec "$@"
+
