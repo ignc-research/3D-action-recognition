@@ -1,3 +1,9 @@
+# Setup
+
+First download these two pre-trained models to zed_catkin_ws/src/mmdetection_ros/checkpoints
+ - slowfast_kinetics_pretrained_r50_8x8x1_20e_ava_rgb_20201217-ae225e97.pth
+ - slowonly_omnisource_pretrained_r101_8x8x1_20e_ava_rgb_20201217-16378594.pth
+
 # 3D-action-recognition
 
 This repository implements two demos:  
